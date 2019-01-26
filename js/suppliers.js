@@ -5,7 +5,11 @@ $(document).ready(function(){
     //Get the data from the mysql database and put into the datatable
     fetchDataTable()
 
+    //Add new supplier
     add()
+
+    //Mask for the CPF or CNPJ field
+    maskCpfCnpj()
 })
 
 /**
@@ -31,11 +35,14 @@ function fetchDataTable(){
     })
 }
 
+/**
+ * Add a new supplier in the mysql database
+ */
 function add() {
 
-    $('#addForm').on('submit', function(event){
+    $('#addForm').parsley()
 
-        $.validate()
+    $('#addForm').on('submit', function(event){
 
         event.preventDefault()        
 
@@ -57,3 +64,19 @@ function add() {
         }) // /ajax
     }) // /on submit
 } // / function add
+
+/**
+ * Perform the mask for the field
+ */
+function maskCpfCnpj() {
+
+    let options = {
+        onKeyPress: function (cpf, ev, el, op) {
+            let masks = ['000.000.000-000', '00.000.000/0000-00'];
+            $('#cpf_cnpj').mask((cpf.length > 14) ? masks[1] : masks[0], op);
+        }
+    }
+    
+    $('#cpf_cnpj').length > 11 ? $('#cpf_cnpj').mask('00.000.000/0000-00', options) : $('#cpf_cnpj').mask('000.000.000-00#', options);
+
+}

@@ -43,19 +43,19 @@
               <form id="addForm">
                 <div class="form-group">
                   <label for="name">Supplier Name</label>
-                  <input id="name" type="text" class="form-control" name="name" aria-describedby="name" placeholder="supplier name" data-validation="required" >
+                  <input id="name" type="text" class="form-control" name="name" aria-describedby="name" placeholder="supplier name" required >
                 </div>
                 <div class="form-group">
                   <label for="cpf_cnpj">CPF/CNPJ</label>
-                  <input id="cpf_cnpj" type="text" class="form-control" name="cpf_cnpj" aria-describedby="cpf_cnpj" placeholder="cpf or cnpj" data-validation="required">
+                  <input id="cpf_cnpj" type="text" class="form-control" name="cpf_cnpj" aria-describedby="cpf_cnpj" placeholder="cpf or cnpj" required>
                 </div>
                 <div class="form-group">
                   <label for="email">Email</label>
-                  <input id="email" type="email" class="form-control" name="email" aria-describedby="email" placeholder="email" data-validation="required">
+                  <input id="email" type="email" class="form-control" name="email" aria-describedby="email" placeholder="email" required>
                 </div>
                 <div class="form-group">
                   <label for="status">Supplier Status</label>
-                  <select id="status" class="form-control" name="status" id="status" data-validation="required">
+                  <select id="status" class="form-control" name="status" id="status" required>
                     <option value="">~~~Select a Status~~~</option>
                     <option value=1>Active</option>
                     <option value=0>Inactive</option>
