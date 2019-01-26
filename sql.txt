@@ -1,0 +1,5 @@
+//Create table supplier
+CREATE TABLE `db`.`suppliers` ( `id` INT NOT NULL AUTO_INCREMENT , `name` VARCHAR(120) NOT NULL , `cpf_cnpj` VARCHAR(25) NOT NULL , `email` VARCHAR(50) NOT NULL , `status` INT NOT NULL , PRIMARY KEY (`supplier_id`)) ENGINE = InnoDB;
+
+// Insert values into supplier table
+INSERT INTO `suppliers` (`id`, `name`, `cpf_cnpj`, `email`, `status`) VALUES ('1', 'Apple', '123.456.789-96', 'apple@mac.com', '1');
