@@ -9,13 +9,11 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs4-4.1.1/jszip-2.5.0/dt-1.10.18/b-1.5.4/b-colvis-1.5.4/b-flash-1.5.4/b-html5-1.5.4/b-print-1.5.4/r-2.2.2/datatables.min.js"></script>
 
-    <!-- Validator -->
-    <!-- <script type="text/javascript"
-    src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js">
-    </script>  -->
-
     <!-- Parsley JS -->
-    <script src="http://parsleyjs.org/dist/parsley.min.js"></script>
+    <script src="plugins/parsley/parsley.min.js"></script>
 
     <!-- CPF e CNPJ validator -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
+
+    <!-- Jquery Confirm -->
+    <script src="plugins/confirmjs/confirmjs.min.js"></script>

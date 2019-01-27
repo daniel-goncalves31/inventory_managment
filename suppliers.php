@@ -13,7 +13,7 @@
 
       <div class="card-body">
       
-        <button class="btn btn-secondary ml-auto mb-4" id="openAddModal" data-toggle="modal" data-target="#addModal">
+        <button class="btn btn-secondary ml-auto mb-4" id="openAddModal" data-toggle="modal" data-target="#modal">
           <i class="fas fa-plus"></i> Add New Supplier
         </button>
 
@@ -30,7 +30,7 @@
         </table>
 
         <!-- Modal -->
-        <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="AddModal" aria-hidden="true">
+        <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="AddModal" aria-hidden="true">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
@@ -40,14 +40,14 @@
                 </button>
               </div>
               <div class="modal-body">
-              <form id="addForm">
+              <form id="form">
                 <div class="form-group">
                   <label for="name">Supplier Name</label>
                   <input id="name" type="text" class="form-control" name="name" aria-describedby="name" placeholder="supplier name" required >
                 </div>
                 <div class="form-group">
                   <label for="cpf_cnpj">CPF/CNPJ</label>
-                  <input id="cpf_cnpj" type="text" class="form-control" name="cpf_cnpj" aria-describedby="cpf_cnpj" placeholder="cpf or cnpj" required>
+                  <input id="cpf_cnpj" type="text" class="form-control" name="cpf_cnpj" aria-describedby="cpf_cnpj" placeholder="cpf or cnpj" data-parsley-minlength="14" required>
                 </div>
                 <div class="form-group">
                   <label for="email">Email</label>

@@ -28,7 +28,10 @@ if (!isset($_SESSION['user_id'])) {
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4-4.1.1/jszip-2.5.0/dt-1.10.18/b-1.5.4/b-colvis-1.5.4/b-flash-1.5.4/b-html5-1.5.4/b-print-1.5.4/r-2.2.2/datatables.min.css"/>
 
     <!-- Parsley CSS -->
-    <link rel="stylesheet" href="http://parsleyjs.org/src/parsley.css">
+    <link rel="stylesheet" href="plugins/parsley/parsley.css">
+
+    <!-- Jquery Confirm -->
+    <link rel="stylesheet" href="plugins/confirmjs/confirmjs.min.css">
     
     <!-- Style -->
     <link rel="stylesheet" href="css/menu.css">

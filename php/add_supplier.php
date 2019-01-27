@@ -4,8 +4,6 @@
 
     if(isset($_POST['name'])) {
 
-        $response = '';
-
         $name = $_POST['name'];
         $cpf_cnpj = $_POST['cpf_cnpj'];
         $email = $_POST['email'];

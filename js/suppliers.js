@@ -10,7 +10,8 @@ $(document).ready(function(){
 
     //Mask for the CPF or CNPJ field
     maskCpfCnpj()
-})
+
+}) // /document.ready
 
 /**
  * Function for fetch and get the data from mysql database
@@ -33,33 +34,43 @@ function fetchDataTable(){
             //handle errors
         }
     })
-}
+} // function fetchDataTable
 
 /**
  * Add a new supplier in the mysql database
  */
 function add() {
 
-    $('#addForm').parsley()
+    $('#form').parsley()
 
-    $('#addForm').on('submit', function(event){
+    $('#form').on('submit', function(event){
 
         event.preventDefault()        
 
         $.ajax({
             type: 'POST',
-            data: $('#addForm').serialize(),
+            data: $('#form').serialize(),
             url: 'php/add_supplier.php',
-            success: function(response){
+            success: function(result){
 
-                alert(response)
-                $('#addModal').modal('hide')
-                $('#addForm').reset()
-                table.ajax.reload(null, false)
+                //decode the result
+                result = JSON.parse(result)
+
+                if(result === 'OK') {
+                    myAlert('alert', 'Supplier Added Succesfully', 'Success', 'green', 1, 'success')
+                    $('#form')[0].reset()
+                    $('#form').parsley().reset()
+                    $('#modal').modal('hide')
+                    table.ajax.reload(null, false)    
+
+                } else {
+                    myAlert('alert', result, 'Error', 'red', 0, 'danger')
+                }
 
             },
-            error: function(response){
-                alert(response)
+            error: function(result){
+                
+                myAlert('alert', result, 'Error', 'red', 0, 'danger')
             }
         }) // /ajax
     }) // /on submit
@@ -79,4 +90,73 @@ function maskCpfCnpj() {
     
     $('#cpf_cnpj').length > 11 ? $('#cpf_cnpj').mask('00.000.000/0000-00', options) : $('#cpf_cnpj').mask('000.000.000-00#', options);
 
-}
+} // function maskCpfCnpj
+
+/**
+ * Display the alerts and the dialogs
+ */
+function myAlert(type, content, title, color, icon, button) {
+
+    let icons = ['fas fa-times', 'fas fa-check-circle', 'fas fa-exclamation-triangle', 'fas fa-question']
+
+    if (type === 'alert') {
+
+        $.alert({
+            title: title,
+            content: content,
+            closeIcon: true,
+            draggable: true,
+            columnClass: 'col-md-4',
+            backgroundDismiss: true,
+            escapeKey: true,
+            theme: 'modern',
+            animation: 'scale',
+            closeAnimation: 'RotateXR',
+            type: color,
+            typeAnimated: true,
+            closeIcon: 'fas fa-times',
+            icon: icons[icon],
+            buttons: {
+                ok: {
+                    text: 'OK',
+                    btnClass: 'btn-' + button                
+                }
+            }
+
+        }) // /alert
+
+    } else if (type === 'confirm') {
+
+        $.confirm({
+            title: title,
+            content: content,
+            closeIcon: true,
+            draggable: true,
+            columnClass: 'col-md-4',
+            backgroundDismiss: false,
+            backgroundDismissAnimation: 'glow',
+            escapeKey: true,
+            theme: 'modern',
+            animation: 'scale',
+            closeAnimation: 'RotateXR',
+            type: color,
+            typeAnimated: true,
+            closeIcon: 'fas fa-times',
+            icon: icons[3],
+            buttons: {
+                yes: {
+                    text: 'Yes',
+                    btnClass: 'btn-Blue',
+                    action: function(){}
+                },
+                no: {
+                    text: 'No',
+                    btnClass: 'btn-Red'
+                }
+            }
+
+        }) // /confirm
+
+    } // / if-else
+
+} // /function myAlert
