@@ -32,13 +32,13 @@
 
             } else {
 
-                $response = "Database error";
+                $response = "Database query error";
             }
         }
 
     } else {
 
-        echo 'ERROR: No data was passed';
+        $response = 'ERROR: No data was passed';
 
     }
 

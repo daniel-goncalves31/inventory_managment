@@ -1,12 +1,26 @@
-let table;
+//dataTable variable
+let table; 
+//supplier id variable
+let supplierId;
 
 $(document).ready(function(){
 
     //Get the data from the mysql database and put into the datatable
     fetchDataTable()
 
+    //form validation
+    $('#form').parsley()
+
+    // On hide/close modal
+    $('#modal').on('hide.bs.modal', function(){
+        $('#form')[0].reset()
+        $('#form').parsley().reset()
+
+        supplierId = ""
+    })
+
     //Add new supplier
-    add()
+    add_updated()
 
     //Mask for the CPF or CNPJ field
     maskCpfCnpj()
@@ -39,27 +53,29 @@ function fetchDataTable(){
 /**
  * Add a new supplier in the mysql database
  */
-function add() {
+function add_updated() {
 
-    $('#form').parsley()
-
+    // on form submit
     $('#form').on('submit', function(event){
 
-        event.preventDefault()        
+        event.preventDefault()
+        
+        let url = supplierId === "" ? 'php/add_supplier.php' : 'php/edit_supplier.php'
+        let text = supplierId === "" ? 'Added' : 'Updated'
+        let data = supplierId === "" ? $('#form').serialize() : $('#form').serialize() + '&id=' + supplierId
 
+        console.log(url)
         $.ajax({
             type: 'POST',
-            data: $('#form').serialize(),
-            url: 'php/add_supplier.php',
+            data: data,
+            url: url,
             success: function(result){
 
                 //decode the result
                 result = JSON.parse(result)
 
                 if(result === 'OK') {
-                    myAlert('alert', 'Supplier Added Succesfully', 'Success', 'green', 1, 'success')
-                    $('#form')[0].reset()
-                    $('#form').parsley().reset()
+                    myAlert('alert', 'Supplier ' + text + ' Succesfully', 'Success', 'green', 1, 'success')
                     $('#modal').modal('hide')
                     table.ajax.reload(null, false)    
 
@@ -75,6 +91,31 @@ function add() {
         }) // /ajax
     }) // /on submit
 } // / function add
+
+/**
+ * Function to edit the supplier
+ */
+function openEditModal(id, row) {
+    
+    $('.modal-title').text('Edit Supplier')
+
+    //fill up the modal with the supplier data
+    $('#name').val(table.rows(row).data()[0][0])
+    $('#cpf_cnpj').val(table.rows(row).data()[0][1])
+    $('#email').val(table.rows(row).data()[0][2])
+    if(table.rows(row).data()[0][3].search('Active') > 0) {
+        $('#status').val(1)
+    } else {
+        $('#status').val(0)
+    }
+
+    supplierId = id
+    
+    // show the modal
+    $('#modal').modal('show')
+
+
+} // /function edit
 
 /**
  * Perform the mask for the field
@@ -97,7 +138,7 @@ function maskCpfCnpj() {
  */
 function myAlert(type, content, title, color, icon, button) {
 
-    let icons = ['fas fa-times', 'fas fa-check-circle', 'fas fa-exclamation-triangle', 'fas fa-question']
+    let icons = ['fas fa-times', 'fas fa-check', 'fas fa-exclamation-triangle', 'fas fa-question']
 
     if (type === 'alert') {
 
