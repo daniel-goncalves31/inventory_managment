@@ -13,8 +13,11 @@
 
       <div class="card-body">
       
-        <button class="btn btn-secondary ml-auto mb-4" id="openAddModal" data-toggle="modal" data-target="#modal">
+        <button class="btn btn-secondary ml-auto mb-4" data-toggle="modal" data-target="#modal">
           <i class="fas fa-plus"></i> Add New Supplier
+        </button>
+        <button class="btn btn-secondary ml-auto mb-4" data-toggle="modal" data-target="#file-modal">
+        <i class="fas fa-file-csv"></i> Import CSV file
         </button>
 
         <table id="table" class="table table-bordered table-striped" style="width: 100%;">
@@ -30,7 +33,7 @@
         </table>
 
         <!-- Modal -->
-        <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="AddModal" aria-hidden="true">
+        <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="Modal" aria-hidden="true">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
@@ -70,6 +73,32 @@
             </div>
           </div>
         </div> <!-- /modal -->
+
+        <div class="modal fade" id="file-modal" tabindex="-1" role="dialog" aria-labelledby="FileModal" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title">Select a valid CSV file</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+              <form id="csv_form" enctype="multipart/form-data">
+                <div class="custom-file">
+                    <input name="file" type="file" class="custom-file-input" id="csv_file" accept='.csv'>
+                    <label class="custom-file-label" for="csv_file">Choose file</label>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button id="btn_csv" type="submit" class="btn btn-primary">Done</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
       </div> <!-- /card-body -->
 
     </div> <!-- /card -->

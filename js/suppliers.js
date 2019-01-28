@@ -25,6 +25,8 @@ $(document).ready(function(){
     //Mask for the CPF or CNPJ field
     maskCpfCnpj()
 
+    importCsv()
+
 }) // /document.ready
 
 /**
@@ -231,3 +233,49 @@ function myAlert(content, title, color, icon, button) {
 
 
 } // /function myAlert
+
+function importCsv(){
+
+    $('#csv_form').on('submit', function(event){
+
+        event.preventDefault()
+
+        let csv = $('#csv_file').val()
+        
+        if(csv.search('.csv') > 0 || csv !== "") {
+
+            $.ajax({
+                type: 'POST',
+                url: 'php/import_csv_supplier.php',
+                data: new FormData(this),
+                contentType:false,
+                cache:false,
+                processData:false,
+
+                success: function(result){
+    
+                    if(result.search('Total') === 0) {
+                        myAlert('File Imported successfully </br>' + result, 'Success', 'green', 1, 'success')
+                        table.ajax.reload(null, false)    
+    
+                    } else {
+                        alert('error')
+                        myAlert(result, 'Error', 'red', 0, 'danger')
+                    }
+    
+                },
+                error: function(result){
+                    
+                    myAlert(result, 'Error', 'red', 0, 'danger')
+                }
+
+            })// /ajax
+
+        } else {
+
+            myAlert('Please select a CSV file for continue', 'Error', 'red', 1, 'danger')
+        }
+
+    }) // btn_csv.click
+
+} // /function importCsv
