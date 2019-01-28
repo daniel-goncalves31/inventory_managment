@@ -25,7 +25,7 @@
             <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modalEdit" onclick="openEditModal(' . $row['id'] . ',' . $i .')">
                 <i class="fas fa-pencil-alt"></i>
             </button>
-            <button type="button" class="btn btn-danger" onclick="delete(' . $row['id']. ')">
+            <button type="button" class="btn btn-danger" onclick="remove(' . $row['id']. ')">
                 <i class="fas fa-times"></i>
             </button>
         </div>';

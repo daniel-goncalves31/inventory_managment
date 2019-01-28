@@ -51,7 +51,7 @@ function fetchDataTable(){
 } // function fetchDataTable
 
 /**
- * Add a new supplier in the mysql database
+ * Add or Update a supplier in the mysql database
  */
 function add_updated() {
 
@@ -60,6 +60,7 @@ function add_updated() {
 
         event.preventDefault()
         
+        // check the id value for verify if is insert or update
         let url = supplierId === "" ? 'php/add_supplier.php' : 'php/edit_supplier.php'
         let text = supplierId === "" ? 'Added' : 'Updated'
         let data = supplierId === "" ? $('#form').serialize() : $('#form').serialize() + '&id=' + supplierId
@@ -75,22 +76,86 @@ function add_updated() {
                 result = JSON.parse(result)
 
                 if(result === 'OK') {
-                    myAlert('alert', 'Supplier ' + text + ' Succesfully', 'Success', 'green', 1, 'success')
+                    myAlert('Supplier ' + text + ' Succesfully', 'Success', 'green', 1, 'success')
                     $('#modal').modal('hide')
                     table.ajax.reload(null, false)    
 
                 } else {
-                    myAlert('alert', result, 'Error', 'red', 0, 'danger')
+                    myAlert(result, 'Error', 'red', 0, 'danger')
                 }
 
             },
             error: function(result){
                 
-                myAlert('alert', result, 'Error', 'red', 0, 'danger')
+                myAlert(result, 'Error', 'red', 0, 'danger')
             }
         }) // /ajax
     }) // /on submit
 } // / function add
+
+/**
+ * Remove the supplier of the mysql database
+ * @param {*} id 
+ */
+function remove(id) {
+
+    $.confirm({
+        title: 'Do you really want to delete this record?',
+        closeIcon: true,
+        draggable: true,
+        columnClass: 'col-md-4',
+        backgroundDismiss: false,
+        backgroundDismissAnimation: 'glow',
+        escapeKey: true,
+        theme: 'modern',
+        animation: 'scale',
+        closeAnimation: 'RotateXR',
+        type: 'red',
+        typeAnimated: true,
+        closeIcon: 'fas fa-times',
+        icon: 'fas fa-question',
+        buttons: {
+            yes: {
+                text: 'Yes',
+                btnClass: 'btn-blue',
+                action: function(){
+                    console.log('yes')
+                    $.ajax({
+
+                        type: 'POST',
+                        data: {'id': id},
+                        url: 'php/delete_supplier.php',
+                        success: function(result){
+
+                            //decode the result
+                            result = JSON.parse(result)
+            
+                            if(result === 'OK') {
+                                myAlert('Supplier deleted Succesfully', 'Success', 'green', 1, 'success')
+                                table.ajax.reload(null, false)    
+            
+                            } else {
+                                myAlert(result, 'Error', 'red', 0, 'danger')
+                            }
+            
+                        },
+                        error: function(result){
+                            
+                            myAlert(result, 'Error', 'red', 0, 'danger')
+                        }
+
+                    }) // /ajax
+
+                }// /yes-action
+            },
+            no: {
+                text: 'No',
+                btnClass: 'btn-red'
+            }
+        }
+
+    }) // /confirm
+}
 
 /**
  * Function to edit the supplier
@@ -136,68 +201,33 @@ function maskCpfCnpj() {
 /**
  * Display the alerts and the dialogs
  */
-function myAlert(type, content, title, color, icon, button) {
+function myAlert(content, title, color, icon, button) {
 
     let icons = ['fas fa-times', 'fas fa-check', 'fas fa-exclamation-triangle', 'fas fa-question']
 
-    if (type === 'alert') {
-
-        $.alert({
-            title: title,
-            content: content,
-            closeIcon: true,
-            draggable: true,
-            columnClass: 'col-md-4',
-            backgroundDismiss: true,
-            escapeKey: true,
-            theme: 'modern',
-            animation: 'scale',
-            closeAnimation: 'RotateXR',
-            type: color,
-            typeAnimated: true,
-            closeIcon: 'fas fa-times',
-            icon: icons[icon],
-            buttons: {
-                ok: {
-                    text: 'OK',
-                    btnClass: 'btn-' + button                
-                }
+    $.alert({
+        title: title,
+        content: content,
+        closeIcon: true,
+        draggable: true,
+        columnClass: 'col-md-4',
+        backgroundDismiss: true,
+        escapeKey: true,
+        theme: 'modern',
+        animation: 'scale',
+        closeAnimation: 'RotateXR',
+        type: color,
+        typeAnimated: true,
+        closeIcon: 'fas fa-times',
+        icon: icons[icon],
+        buttons: {
+            ok: {
+                text: 'OK',
+                btnClass: 'btn-' + button                
             }
+        }
 
-        }) // /alert
+    }) // /alert
 
-    } else if (type === 'confirm') {
-
-        $.confirm({
-            title: title,
-            content: content,
-            closeIcon: true,
-            draggable: true,
-            columnClass: 'col-md-4',
-            backgroundDismiss: false,
-            backgroundDismissAnimation: 'glow',
-            escapeKey: true,
-            theme: 'modern',
-            animation: 'scale',
-            closeAnimation: 'RotateXR',
-            type: color,
-            typeAnimated: true,
-            closeIcon: 'fas fa-times',
-            icon: icons[3],
-            buttons: {
-                yes: {
-                    text: 'Yes',
-                    btnClass: 'btn-Blue',
-                    action: function(){}
-                },
-                no: {
-                    text: 'No',
-                    btnClass: 'btn-Red'
-                }
-            }
-
-        }) // /confirm
-
-    } // / if-else
 
 } // /function myAlert
