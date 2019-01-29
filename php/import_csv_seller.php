@@ -16,17 +16,17 @@
 
         while(($row = fgetcsv($file, 1000, ';')) !== FALSE) {
 
-            $query = "INSERT INTO clients(name, cpf_cnpj, reg_date, email, status) VALUES (?, ?, ?, ?, ?)";
+            $query = "INSERT INTO sellers(name, cpf, salary, hir_date, status) VALUES (?, ?, ?, ?, ?)";
 
             $stmt = mysqli_stmt_init($con);
 
             //convert date format 'dd/mm/yyyy' for 'yyyy-mm-dd'
-            $date = strtotime(str_replace('/','-',$row[2]));
+            $date = strtotime(str_replace('/','-',$row[3]));
             $date_formated = date('Y-m-d', $date);
-    
+        
             if(mysqli_stmt_prepare($stmt, $query)) {
     
-                mysqli_stmt_bind_param($stmt, 'ssssi', $row[0], $row[1], $date_formated, $row[3], $row[4]);
+                mysqli_stmt_bind_param($stmt, 'ssssi', $row[0], $row[1], $row[2], $date_formated, $row[4]);
                 mysqli_stmt_execute($stmt);
     
                 $success++;
@@ -52,5 +52,6 @@
     echo $response;
 
     $con->close()
+
 
 ?>

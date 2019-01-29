@@ -2,7 +2,7 @@
 
     require_once 'db_connection.php';
 
-    $query = 'SELECT * FROM clients';
+    $query = 'SELECT * FROM sellers';
 
     $result = mysqli_query($con, $query);
 
@@ -30,18 +30,20 @@
             </button>
         </div>';
 
+        $salary = "R$ " . str_replace('.',',',$row['salary']);
+
         //convert date format
-        $date = strtotime(str_replace('-','/',$row['reg_date']));
+        $date = strtotime(str_replace('-','/',$row['hir_date']));
         $date_formated = date('d/m/Y', $date);
-        
+
 
         $i++;
 
         $output['data'][] = array(
             $row['name'],
-            $row['cpf_cnpj'],
+            $row['cpf'],
+            $salary,
             $date_formated,
-            $row['email'],
             $status,
             $buttons
         );

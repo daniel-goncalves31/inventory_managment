@@ -50,6 +50,9 @@ if (!isset($_SESSION['user_id'])) {
             <a href="clients.php" class="menu_btn"><i class="fas fa-user-tag"></i> Clients</a>
         </li>
         <li class="item" >
+            <a href="sellers.php" class="menu_btn"><i class="fas fa-user-tie"></i> Sellers</a>
+        </li>
+        <li class="item" >
             <a href="#" class="menu_btn"><i class="far fa-envelope"></i> Messages</a>
             <div class="smenu">
                 <a href="#">New Message</a>

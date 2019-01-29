@@ -1,7 +1,7 @@
 //dataTable variable
 let table; 
-//client id variable
-let clientId = null;
+//seller id variable
+let sellerId = null;
 
 $(document).ready(function(){
 
@@ -16,7 +16,7 @@ $(document).ready(function(){
         $('#form')[0].reset()
         $('#form').parsley().reset()
 
-        clientId = null
+        sellerId = null
     })
 
     // on hide-close modal CSV
@@ -24,11 +24,12 @@ $(document).ready(function(){
         $('#csv_form')[0].reset()
     })
 
-    //Add new client
+
+    //Add new seller
     add_updated()
 
     //Mask for the CPF or CNPJ field
-    maskCpfCnpj()
+    maskCpf()
 
     importCsv()
 
@@ -50,7 +51,7 @@ function fetchDataTable(){
         ],
         order: [],
         ajax: {
-            url: 'php/fetch_client.php',
+            url: 'php/fetch_seller.php',
             type: 'POST'
             //handle errors
         }
@@ -58,7 +59,7 @@ function fetchDataTable(){
 } // function fetchDataTable
 
 /**
- * Add or Update a client in the mysql database
+ * Add or Update a seller in the mysql database
  */
 function add_updated() {
 
@@ -68,11 +69,10 @@ function add_updated() {
         event.preventDefault()
         
         // check the id value for verify if is insert or update
-        let url = clientId === null ? 'php/add_client.php' : 'php/edit_client.php'
-        let text = clientId === null ? 'Added' : 'Updated'
-        let data = clientId === null ? $('#form').serialize() : $('#form').serialize() + '&id=' + clientId
+        let url = sellerId === null ? 'php/add_seller.php' : 'php/edit_seller.php'
+        let text = sellerId === null ? 'Added' : 'Updated'
+        let data = sellerId === null ? $('#form').serialize() : $('#form').serialize() + '&id=' + sellerId
 
-        alert(data)
         $.ajax({
             type: 'POST',
             data: data,
@@ -80,7 +80,7 @@ function add_updated() {
             success: function(result){
 
                 if(result === 'OK') {
-                    myAlert('Client ' + text + ' Succesfully', 'Success', 'green', 1, 'success')
+                    myAlert('Seller ' + text + ' Succesfully', 'Success', 'green', 1, 'success')
                     $('#modal').modal('hide')
                     table.ajax.reload(null, false)    
 
@@ -98,7 +98,7 @@ function add_updated() {
 } // / function add
 
 /**
- * Remove the client of the mysql database
+ * Remove the seller of the mysql database
  * @param {*} id 
  */
 function del(id) {
@@ -128,11 +128,11 @@ function del(id) {
 
                         type: 'POST',
                         data: {'id': id},
-                        url: 'php/delete_client.php',
+                        url: 'php/delete_seller.php',
                         success: function(result){
             
                             if(result === 'OK') {
-                                myAlert('Client deleted Succesfully', 'Success', 'green', 1, 'success')
+                                myAlert('Seller deleted Succesfully', 'Success', 'green', 1, 'success')
                                 table.ajax.reload(null, false)    
             
                             } else {
@@ -159,28 +159,28 @@ function del(id) {
 }
 
 /**
- * Function to edit the client
+ * Function to edit the seller
  */
 function openEditModal(id, row) {
     
-    $('.modal-title').text('Edit Client')
+    $('.modal-title').text('Edit Seller')
 
-    //fill up the modal with the client data
+    //fill up the modal with the seller data
     $('#name').val(table.rows(row).data()[0][0])
-    $('#cpf_cnpj').val(table.rows(row).data()[0][1])
+    $('#cpf').val(table.rows(row).data()[0][1])
+    $('#salary').val(table.rows(row).data()[0][2])
 
     //convert date to Y-m-d
-    let date = table.rows(row).data()[0][2].split('/')
-    $('#reg_date').val(date[2] + '-' + date[1] + '-' + date[0])
+    let date = table.rows(row).data()[0][3].split('/')
+    $('#hir_date').val(date[2] + '-' + date[1] + '-' + date[0])
 
-    $('#email').val(table.rows(row).data()[0][3])
     if(table.rows(row).data()[0][4].search('Active') > 0) {
         $('#status').val(1)
     } else {
         $('#status').val(0)
     }
 
-    clientId = id
+    sellerId = id
     
     // show the modal
     $('#modal').modal('show')
@@ -191,16 +191,16 @@ function openEditModal(id, row) {
 /**
  * Perform the mask for the field
  */
-function maskCpfCnpj() {
+function maskCpf() {
 
     let options = {
         onKeyPress: function (cpf, ev, el, op) {
-            let masks = ['000.000.000-000', '00.000.000/0000-00'];
-            $('#cpf_cnpj').mask((cpf.length > 14) ? masks[1] : masks[0], op);
+            let masks = ['000.000.000-00'];
+            $('#cpf').mask(masks[0], op);
         }
     }
     
-    $('#cpf_cnpj').length > 11 ? $('#cpf_cnpj').mask('00.000.000/0000-00', options) : $('#cpf_cnpj').mask('000.000.000-00#', options);
+    $('#cpf').mask('000.000.000-00#', options);
 
 } // function maskCpfCnpj
 
@@ -250,7 +250,7 @@ function importCsv(){
 
             $.ajax({
                 type: 'POST',
-                url: 'php/import_csv_client.php',
+                url: 'php/import_csv_seller.php',
                 data: new FormData(this),
                 contentType:false,
                 cache:false,
@@ -260,8 +260,8 @@ function importCsv(){
     
                     if(result.search('Total') === 0) {
                         myAlert('File Imported successfully </br>' + result, 'Success', 'green', 1, 'success')
-                        table.ajax.reload(null, false)
                         $('#file-modal').modal('hide')
+                        table.ajax.reload(null, false)    
     
                     } else {
                         alert('error')
