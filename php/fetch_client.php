@@ -2,7 +2,7 @@
 
     require_once 'db_connection.php';
 
-    $query = 'SELECT * FROM suppliers';
+    $query = 'SELECT * FROM clients';
 
     $result = mysqli_query($con, $query);
 
@@ -35,6 +35,7 @@
         $output['data'][] = array(
             $row['name'],
             $row['cpf_cnpj'],
+            $row['reg_date'],
             $row['email'],
             $status,
             $buttons

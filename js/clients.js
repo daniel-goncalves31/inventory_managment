@@ -1,7 +1,7 @@
 //dataTable variable
 let table; 
-//supplier id variable
-let supplierId = null;
+//client id variable
+let clientId = null;
 
 $(document).ready(function(){
 
@@ -16,10 +16,10 @@ $(document).ready(function(){
         $('#form')[0].reset()
         $('#form').parsley().reset()
 
-        supplierId = null
+        clientId = null
     })
 
-    //Add new supplier
+    //Add new client
     add_updated()
 
     //Mask for the CPF or CNPJ field
@@ -45,7 +45,7 @@ function fetchDataTable(){
         ],
         order: [],
         ajax: {
-            url: 'php/fetch_supplier.php',
+            url: 'php/fetch_client.php',
             type: 'POST'
             //handle errors
         }
@@ -53,7 +53,7 @@ function fetchDataTable(){
 } // function fetchDataTable
 
 /**
- * Add or Update a supplier in the mysql database
+ * Add or Update a client in the mysql database
  */
 function add_updated() {
 
@@ -63,22 +63,18 @@ function add_updated() {
         event.preventDefault()
         
         // check the id value for verify if is insert or update
-        let url = supplierId === null ? 'php/add_supplier.php' : 'php/edit_supplier.php'
-        let text = supplierId === null ? 'Added' : 'Updated'
-        let data = supplierId === null ? $('#form').serialize() : $('#form').serialize() + '&id=' + supplierId
+        let url = clientId === null ? 'php/add_client.php' : 'php/edit_client.php'
+        let text = clientId === null ? 'Added' : 'Updated'
+        let data = clientId === null ? $('#form').serialize() : $('#form').serialize() + '&id=' + clientId
 
-        console.log(url)
         $.ajax({
             type: 'POST',
             data: data,
             url: url,
             success: function(result){
 
-                //decode the result
-                result = JSON.parse(result)
-
                 if(result === 'OK') {
-                    myAlert('Supplier ' + text + ' Succesfully', 'Success', 'green', 1, 'success')
+                    myAlert('Client ' + text + ' Succesfully', 'Success', 'green', 1, 'success')
                     $('#modal').modal('hide')
                     table.ajax.reload(null, false)    
 
@@ -96,7 +92,7 @@ function add_updated() {
 } // / function add
 
 /**
- * Remove the supplier of the mysql database
+ * Remove the client of the mysql database
  * @param {*} id 
  */
 function del(id) {
@@ -126,14 +122,11 @@ function del(id) {
 
                         type: 'POST',
                         data: {'id': id},
-                        url: 'php/delete_supplier.php',
+                        url: 'php/delete_client.php',
                         success: function(result){
-
-                            //decode the result
-                            result = JSON.parse(result)
             
                             if(result === 'OK') {
-                                myAlert('Supplier deleted Succesfully', 'Success', 'green', 1, 'success')
+                                myAlert('Client deleted Succesfully', 'Success', 'green', 1, 'success')
                                 table.ajax.reload(null, false)    
             
                             } else {
@@ -160,23 +153,24 @@ function del(id) {
 }
 
 /**
- * Function to edit the supplier
+ * Function to edit the client
  */
 function openEditModal(id, row) {
     
-    $('.modal-title').text('Edit Supplier')
+    $('.modal-title').text('Edit Client')
 
-    //fill up the modal with the supplier data
+    //fill up the modal with the client data
     $('#name').val(table.rows(row).data()[0][0])
     $('#cpf_cnpj').val(table.rows(row).data()[0][1])
-    $('#email').val(table.rows(row).data()[0][2])
-    if(table.rows(row).data()[0][3].search('Active') > 0) {
+    $('#reg_date').val(table.rows(row).data()[0][2]) 
+    $('#email').val(table.rows(row).data()[0][3])
+    if(table.rows(row).data()[0][4].search('Active') > 0) {
         $('#status').val(1)
     } else {
         $('#status').val(0)
     }
 
-    supplierId = id
+    clientId = id
     
     // show the modal
     $('#modal').modal('show')
@@ -246,7 +240,7 @@ function importCsv(){
 
             $.ajax({
                 type: 'POST',
-                url: 'php/import_csv_supplier.php',
+                url: 'php/import_csv_client.php',
                 data: new FormData(this),
                 contentType:false,
                 cache:false,

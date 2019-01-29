@@ -40,30 +40,33 @@ if (!isset($_SESSION['user_id'])) {
 <body>
 
     <div class="menu">
-        <li class="item" id="profile">
+        <li class="item" >
             <a href="dashboard.php" class="menu_btn"><i class="far fa-user"></i> Dashboard</a>
         </li>
-        <li class="item" id="profile">
-            <a href="suppliers.php" class="menu_btn"><i class="fas fa-boxes"></i></i> Suppliers</a>
+        <li class="item" >
+            <a href="suppliers.php" class="menu_btn"><i class="fas fa-boxes"></i> Suppliers</a>
         </li>
-        <li class="item" id="messages">
-            <a href="#messages" class="menu_btn"><i class="far fa-envelope"></i> Messages</a>
+        <li class="item" >
+            <a href="clients.php" class="menu_btn"><i class="fas fa-user-tag"></i> Clients</a>
+        </li>
+        <li class="item" >
+            <a href="#" class="menu_btn"><i class="far fa-envelope"></i> Messages</a>
             <div class="smenu">
                 <a href="#">New Message</a>
                 <a href="#">View Messages</a>
                 <a href="#">Spam</a>
             </div>
         </li>
-        <li class="item" id="settings">
-            <a href="#settings" class="menu_btn"><i class="fas fa-cog"></i> Settings </a>
+        <li class="item" >
+            <a href="#" class="menu_btn"><i class="fas fa-cog"></i> Settings </a>
             <div class="smenu">
                 <a href="#">Password</a>
                 <a href="#">Language</a>
             </div>
         </li>
 
-        <li class="item" id="logout">
-            <a href="#logout" class="menu_btn"><i class="fas fa-sign-out-alt"></i> LogOut</a>
+        <li class="item" >
+            <a href="#" class="menu_btn"><i class="fas fa-sign-out-alt"></i> LogOut</a>
         </li>
     </div> <!-- /menu -->
         

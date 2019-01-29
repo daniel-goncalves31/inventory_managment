@@ -1,5 +1,11 @@
 //Create table supplier
-CREATE TABLE `db`.`suppliers` ( `id` INT NOT NULL AUTO_INCREMENT , `name` VARCHAR(120) NOT NULL , `cpf_cnpj` VARCHAR(25) NOT NULL , `email` VARCHAR(50) NOT NULL , `status` INT NOT NULL , PRIMARY KEY (`supplier_id`)) ENGINE = InnoDB;
+CREATE TABLE `db`.`suppliers` ( `id` INT NOT NULL AUTO_INCREMENT , `name` VARCHAR(120) NOT NULL , `cpf_cnpj` VARCHAR(25) NOT NULL , `email` VARCHAR(50) NOT NULL , `status` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
 
 // Insert values into supplier table
-INSERT INTO `suppliers` (`id`, `name`, `cpf_cnpj`, `email`, `status`) VALUES ('1', 'Apple', '123.456.789-96', 'apple@mac.com', '1');
+INSERT INTO `suppliers` (`id`, `name`, `cpf_cnpj`, `email`, `status`) VALUES (NULL, 'Apple', '123.456.789-96', 'apple@mac.com', '1');
+
+//Create table client
+CREATE TABLE `db`.`clientes` ( `id` INT NOT NULL AUTO_INCREMENT , `name` VARCHAR(150) NOT NULL , `cpf_cnpj` VARCHAR(20) NOT NULL , `reg_date` DATE NOT NULL , `email` VARCHAR(70) NOT NULL , `status` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+// Insert values into supplier table
+INSERT INTO `suppliers` (`id`, `name`, `cpf_cnpj`, `email`, `status`) VALUES (NULL, 'José Augusto', '584.639.987-96', '2019-01-27', jose@gmail.com', '1');
