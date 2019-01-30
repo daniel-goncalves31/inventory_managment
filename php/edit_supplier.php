@@ -6,7 +6,7 @@
     if(isset($_POST['id'])) {
 
         $id = $_POST['id'];
-        $name = $_POST['name'];
+        $name = trim(ucfirst($_POST['name']));
         $cpf_cnpj = $_POST['cpf_cnpj'];
         $email = $_POST['email'];
         $status = $_POST['status'];

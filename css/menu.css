@@ -81,11 +81,3 @@
 .item:target .smenu {
     max-height: 10em;
 }
-
-/*Parsley validator color */
-.parsley-errors-list li {
-    padding-top: 5px;
-    color: rgb(173, 7, 7);
-    font-weight: bold;
-  }
-

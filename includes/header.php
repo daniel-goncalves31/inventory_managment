@@ -36,6 +36,9 @@ if (!isset($_SESSION['user_id'])) {
     <!-- Style -->
     <link rel="stylesheet" href="css/menu.css">
 
+    <!-- InputPicker -->
+    <link rel="stylesheet" href="plugins/inputpicker/inputpicker.css">
+
 </head>
 <body>
 
@@ -44,20 +47,25 @@ if (!isset($_SESSION['user_id'])) {
             <a href="dashboard.php" class="menu_btn"><i class="far fa-user"></i> Dashboard</a>
         </li>
         <li class="item" >
-            <a href="suppliers.php" class="menu_btn"><i class="fas fa-boxes"></i> Suppliers</a>
+            <a href="suppliers.php" class="menu_btn"><i class="fas fa-user-tag"></i> Suppliers</a>
         </li>
         <li class="item" >
-            <a href="clients.php" class="menu_btn"><i class="fas fa-user-tag"></i> Clients</a>
+            <a href="clients.php" class="menu_btn"><i class="fas fa-user-tie"></i> Clients</a>
         </li>
         <li class="item" >
-            <a href="sellers.php" class="menu_btn"><i class="fas fa-user-tie"></i> Sellers</a>
+            <a href="sellers.php" class="menu_btn"><i class="fas fa-sitemap"></i> Sellers</a>
         </li>
         <li class="item" >
-            <a href="#" class="menu_btn"><i class="far fa-envelope"></i> Messages</a>
+            <a href="stock.php" class="menu_btn"><i class="fas fa-boxes"></i> Stock</a>
+        </li>
+        <li class="item" >
+            <a href="purchases.php" class="menu_btn"><i class="fas fa-barcode"></i> Purchases</a>
+        </li>
+        <!-- <li class="item" >
+            <a href="#" class="menu_btn"><i class="fas fa-barcode"></i> Products</a>
             <div class="smenu">
-                <a href="#">New Message</a>
-                <a href="#">View Messages</a>
-                <a href="#">Spam</a>
+                <a href="stock.php">Stock</a>
+                <a href="puchases.php">Purchases</a>
             </div>
         </li>
         <li class="item" >
@@ -66,7 +74,7 @@ if (!isset($_SESSION['user_id'])) {
                 <a href="#">Password</a>
                 <a href="#">Language</a>
             </div>
-        </li>
+        </li> -->
 
         <li class="item" >
             <a href="#" class="menu_btn"><i class="fas fa-sign-out-alt"></i> LogOut</a>

@@ -17,3 +17,6 @@
 
     <!-- Jquery Confirm -->
     <script src="plugins/confirmjs/confirmjs.min.js"></script>
+
+    <!-- InputPicker -->
+    <script src="plugins/inputpicker/inputpicker.js"></script>
