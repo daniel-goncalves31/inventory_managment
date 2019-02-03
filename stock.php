@@ -9,12 +9,10 @@
       
       <div class="card-header"><h4 class="d-4">Stock</h4></div>
 
-      <div class="card-title ml-auto pr-4 pt-3">Stock Management</div>
-
       <div class="card-body">
       
-        <button class="btn btn-secondary ml-auto mb-4" data-toggle="modal" data-target="#modal">
-          <i class="fas fa-plus"></i> Add New Product
+        <button class="btn btn-secondary ml-auto mb-4" id="openAddModal">
+          <i class="fas fa-plus" ></i> Add New Product
         </button>
         <button class="btn btn-secondary ml-auto mb-4" data-toggle="modal" data-target="#file-modal">
         <i class="fas fa-file-csv"></i> Import CSV file
@@ -23,8 +21,8 @@
         <table id="table" class="table table-bordered table-striped" style="width: 100%;">
 
           <thead>
-            <th>Supplier Name</th>
             <th>Product</th>
+            <th>Supplier Name</th>
             <th>Category</th>
             <th>Last Purchase</th>
             <th>Sale Price</th>
@@ -47,10 +45,22 @@
                 </button>
               </div>
               <div class="modal-body">
+              <div class="alert alert-info" role="alert"> <strong>The other fields only can be edited in the Purchases section! </strong> </div>
               <form id="form">
                 <div class="form-group">
+                  <label for="image">Product Image</label>
+                  <img src="images/back1.jpeg" id="product_image">
+                </div>
+                <div class="custom-file">
+                  <input type="file" accept="image/*" class="custom-file-input" id="image_picker">
+                  <label class="custom-file-label" for="image_picker">select the product image</label>
+                  <input type="hidden" name="image" id="image">
+                  </br>
+                </div>
+                <div class="form-group">
                   <label for="supplier">Supplier Name</label>
-                  <input id="supplier" type="text" class="form-control" name="supplier" aria-describedby="supplier" placeholder="supplier name" required >
+                  <select id="supplier" type="text" class="form-control" name="supplier" aria-describedby="supplier" placeholder="supplier name"  required>
+                  </select>
                 </div>
                 <div class="form-group">
                   <label for="product">Product</label>
@@ -75,18 +85,22 @@
                   </div>
                 </div>
                 <div class="form-row">
-                  <div class="col">
+                  <div class="col show_hide">
                     <div class="form-group">
                       <label for="amount">Amount</label>
-                      <input id="amount"  class="form-control" name="amount" aria-describedby="amount" placeholder="amount" data-parsley-gte="#min_amount" required>
+                      <input id="amount" type="number" class="form-control" name="amount" aria-describedby="amount" placeholder="amount">
                     </div>
                   </div>
                   <div class="col">
                     <div class="form-group">
                       <label for="min_amount">Minimum Amount</label>
-                      <input id="min_amount"  class="form-control" name="min_amount" aria-describedby="min_amount" placeholder="minimum amount" required>
+                      <input id="min_amount" type="number" class="form-control" name="min_amount" aria-describedby="min_amount" placeholder="minimum amount" required>
                     </div>
                   </div>
+                </div>
+                <div class="form-group show_hide">
+                  <label for="date">Date</label>
+                  <input id="date" type="date" class="form-control" name="date" aria-describedby="date" placeholder="date">
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -110,9 +124,9 @@
               <div class="modal-body">
               <form id="csv_form" enctype="multipart/form-data">
                 <div class="custom-file">
-                    <input name="file" type="file" class="custom-file-input" id="csv_file" accept='.csv'>
-                    <label class="custom-file-label" for="csv_file">Choose file</label>
-                  </div>
+                  <input name="file" type="file" class="custom-file-input" id="csv_file" accept='.csv'>
+                  <label class="custom-file-label" for="csv_file">Choose file</label>
+                </div>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -134,6 +148,7 @@
 
 <?php require_once 'includes/footer.php'; ?>
 
+<script src="plugins/croppie/croppie.min.js"></script>
 <script src="js/stock.js"></script>
 
 <?php require_once 'includes/end.php'; ?>

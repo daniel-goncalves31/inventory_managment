@@ -6,15 +6,15 @@
 
     $result = mysqli_query($con, $query);
 
-    $output = array();
+    $output = '<option value="">~~~Select a Supplier~~~</option>';
 
-    while($row = mysqli_fetch_object($result)) {
+    while($row = mysqli_fetch_assoc($result)) {
 
-        $output[] = $row;
+        $output .= '<option value="'. $row['id'].'">'.$row['name'].' - - - -  '. $row['cpf_cnpj'].'</option>';
 
     }
 
-    echo json_encode($output);
+    echo $output;
 
     $con->close();
 

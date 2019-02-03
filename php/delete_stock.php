@@ -6,7 +6,7 @@
 
         $id = $_POST['id'];
 
-        $query = "DELETE FROM sellers WHERE id = ?";
+        $query = "DELETE FROM stock WHERE id_stock = ?";
 
         $stmt = mysqli_stmt_init($con);
 

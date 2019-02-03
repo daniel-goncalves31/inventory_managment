@@ -18,11 +18,11 @@
         // if the amount is only greater than the amount than waill be warning
         // else will be danger
         if($row['amount'] > ($row['min_amount'] * 1.3)) {
-            $status = '<center><span class="badge badge-success">OK</span></center>';
+            $status = '<center><span class="badge badge-success">Stock OK</span></center>';
         } elseif($row['amount'] > $row['min_amount']){
             $status = '<center><span class="badge badge-warning">Low Stock</span></center>';
         } else {
-            $status = '<center><span class="badge badge-danger">Critic</span></center>';
+            $status = '<center><span class="badge badge-danger">Stock Critic</span></center>';
         }
 
         //on select row
@@ -36,10 +36,14 @@
             </button>
         </div>';
 
-        //Get supplier name
+
+        //Get the supplier name
         $query = "SELECT name FROM suppliers WHERE id = $row[1]";
         $var = mysqli_query($con, $query);
-        $supplier_name = $var ? $var->fetch_assoc()['name'] : 'Supplier Deleted';
+        $supplier_name = $var ? $var->fetch_assoc()['name'] . '</span>'.'<span class=" d-none">$'.$row[1].'$</span>' : 'Supplier Deleted';
+
+        //Put a image tooltip in the product name
+        $product = '<span data-toggle="tooltip" data-placement="top" title="<img src=\'data:image/jpg;base64,' . base64_encode($row['image']) . '\' height=\'230px\'/>">' . $row[2];
 
         //get and convert date format
         $query = "SELECT MAX(date) as 'LastDate' FROM purchases WHERE id_product = $row[0]";
@@ -53,8 +57,8 @@
         $i++;
 
         $output['data'][] = array(
+            $product,
             $supplier_name,
-            $row[2],
             $row[3],
             $date_formated,
             $sale_price,

@@ -8,9 +8,7 @@
     <div class="card">
       
       <div class="card-header"><h4 class="d-4">Sellers</h4></div>
-
-      <div class="card-title ml-auto pr-4 pt-3">Sellers Management</div>
-
+      
       <div class="card-body">
       
         <button class="btn btn-secondary ml-auto mb-4" data-toggle="modal" data-target="#modal">

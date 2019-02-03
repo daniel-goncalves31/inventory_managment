@@ -7,6 +7,7 @@
 }
 
 .menu {
+    margin-top: 40px;
     width: 200px;
     height: 100%;
     position: fixed;
@@ -30,17 +31,6 @@
     position: relative;
 }
 
-.menu_btn:before {
-    content: "";
-    position: absolute;
-    width: 14px;
-    height: 14px;
-    background: #3498db;
-    left: 20px;
-    bottom: -7px;
-    transform: rotate(45deg);
-}
-
 .menu_btn i {
     margin-right: 10px;
 
@@ -62,22 +52,28 @@
     position: relative;
 }
 
-.smenu a:before{
-    content: "";
-    position: absolute;
-    width: 6px;
-    height: 100%;
-    background: #3498bd;
-    left: 0;
+.card {
+    margin-top: 40px;
+}
+
+/** Horizontal Menu **/
+#horizontal-menu {
+    position: fixed;
     top: 0;
-    transition: 0.3s;
-    opacity: 0;
+    left: 0;
+    background-color: #333;
+    height: 40px;
+    width: 100%;
+    z-index: 999;
+
 }
 
-.smenu a:hover:before{
-    opacity: 1;
+#modal label {
+    font-weight: bold;
 }
-
-.item:target .smenu {
-    max-height: 10em;
+.tooltip-inner {
+    height: 180px;
+    width: 180px;
+    overflow: hidden;
+    padding: 0;
 }

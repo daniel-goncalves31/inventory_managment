@@ -1,43 +1,35 @@
 //dataTable variable
-let table; 
+let table = null;
 //product id variable
 let stockId = null;
+// image of the product
+let image = null;
 
-$(document).ready(function(){
+$(document).ready(function () {
 
     //Get the data from the mysql database and put into the datatable
     fetchDataTable()
 
-    //form validation
+    $('body').tooltip({
+        selector: '[data-toggle="tooltip"]',
+        html: true,
+    });
+    //active the form validation
     $('#form').parsley()
 
-    // On hide/close modal
-    $('#modal').on('hide.bs.modal', function(){
-        $('#form')[0].reset()
-        $('#form').parsley().reset()
+    imageCroppie()
 
-        stockId = null
-    })
+    modalsClose()
 
-    // on hide-close modal CSV
-    $('#file-modal').on('hide.bs.modal', function(){
-        $('#csv_form')[0].reset()
-    })
-
-
-    //Add new product
     add_updated()
 
     importCsv()
 
-    getSuppliers()
+    /*$('#table').dataTable().on('xhr.dt', function(){
 
-    $('#table').dataTable().on('xhr.dt', function(){
-
-    })
+    })*/
 
     // --- Notification systen
-    // --- add product on the stock
 
 
 }) // /document.ready
@@ -45,7 +37,8 @@ $(document).ready(function(){
 /**
  * Function for fetch and get the data from mysql database
  */
-function fetchDataTable(){
+function fetchDataTable() {
+
     table = $('#table').DataTable({
         responsive: true,
         processing: true,
@@ -59,10 +52,11 @@ function fetchDataTable(){
         order: [],
         ajax: {
             url: 'php/fetch_stock.php',
-            type: 'POST'
+            type: 'POST',
             //handle errors
         }
     })
+
 } // function fetchDataTable
 
 /**
@@ -70,39 +64,58 @@ function fetchDataTable(){
  */
 function add_updated() {
 
+    $('#openAddModal').on('click', function () {
+        $('.show_hide').show()
+        $('.show_hide input').attr('data-parsley-required', 'true')
+        $('.alert').hide()
+
+        getSuppliers()
+
+        $('#modal').modal('show')
+
+    })
+
     // on form submit
-    $('#form').on('submit', function(event){
+    $('#form').on('submit', function (event) {
 
         event.preventDefault()
-    
+
+        // var with all form data
+        let data = new FormData(this)
+
+        console.log($('#image').val())
+
         // check the id value for verify if is insert or update
         let url = stockId === null ? 'php/add_stock.php' : 'php/edit_stock.php'
         let text = stockId === null ? 'Added' : 'Updated'
-        let data = stockId === null ? $('#form').serialize() : $('#form').serialize() + '&id=' + stockId
-        
-        console.log(data) //add product/stock
-        /*$.ajax({
+
+        data.append('id', stockId)
+
+        $.ajax({
             type: 'POST',
             data: data,
             url: url,
-            success: function(result){
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            success: function (result) {
 
-                if(result === 'OK') {
+                if (result === 'OK') {
                     myAlert('Product ' + text + ' Succesfully', 'Success', 'green', 1, 'success')
                     $('#modal').modal('hide')
-                    table.ajax.reload(null, false)    
+                    table.ajax.reload(null, false)
 
                 } else {
                     myAlert(result, 'Error', 'red', 0, 'danger')
                 }
 
             },
-            error: function(result){
-                
+            error: function (result) {
+
                 myAlert(result, 'Error', 'red', 0, 'danger')
             }
 
-        }) // /ajax*/
+        }) // /ajax
 
     }) // /on submit
 
@@ -110,7 +123,7 @@ function add_updated() {
 
 /**
  * Remove the product of the mysql database
- * @param {*} id 
+ * @param {*} id
  */
 function del(id) {
 
@@ -133,32 +146,34 @@ function del(id) {
             yes: {
                 text: 'Yes',
                 btnClass: 'btn-blue',
-                action: function(){
+                action: function () {
                     console.log('yes')
                     $.ajax({
 
                         type: 'POST',
-                        data: {'id': id},
+                        data: {
+                            'id': id
+                        },
                         url: 'php/delete_stock.php',
-                        success: function(result){
-            
-                            if(result === 'OK') {
+                        success: function (result) {
+
+                            if (result === 'OK') {
                                 myAlert('Product deleted Succesfully', 'Success', 'green', 1, 'success')
-                                table.ajax.reload(null, false)    
-            
+                                table.ajax.reload(null, false)
+
                             } else {
                                 myAlert(result, 'Error', 'red', 0, 'danger')
                             }
-            
+
                         },
-                        error: function(result){
-                            
+                        error: function (result) {
+
                             myAlert(result, 'Error', 'red', 0, 'danger')
                         }
 
                     }) // /ajax
 
-                }// /yes-action
+                } // /yes-action
             },
             no: {
                 text: 'No',
@@ -167,38 +182,34 @@ function del(id) {
         }
 
     }) // /confirm
-}
+} // function del
 
 /**
- * Function to edit the product
+ * Function to open the Modal with the informations of the product to edit
  */
 function openEditModal(id, row) {
-    
+
     $('.modal-title').text('Edit Product')
 
+    $('.show_hide').hide()
+    $('.show_hide input').removeAttr('data-parsley-required')
+    $('.alert').show()
+
+    getSuppliers(row)
+
     //fill up the modal with the product data
-    $('#name').val(table.rows(row).data()[0][0])
-    $('#cpf').val(table.rows(row).data()[0][1])
-    $('#salary').val(table.rows(row).data()[0][2])
-
-    //convert date to Y-m-d
-    let date = table.rows(row).data()[0][3].split('/')
-    $('#hir_date').val(date[2] + '-' + date[1] + '-' + date[0])
-
-    if(table.rows(row).data()[0][4].search('Active') > 0) {
-        $('#status').val(1)
-    } else {
-        $('#status').val(0)
-    }
+    $('#product').val(table.rows(row).data()[0][1])
+    $('#category').val(table.rows(row).data()[0][2])
+    $('#sale_price').val(table.rows(row).data()[0][4].split('$ ')[1])
+    $('#min_amount').val(table.rows(row).data()[0][6].split(' ')[0])
+    $('#unit').val(table.rows(row).data()[0][6].split(' ')[1])
 
     stockId = id
-    
+
     // show the modal
     $('#modal').modal('show')
 
-
 } // /function edit
-
 
 /**
  * Display the alerts and the dialogs
@@ -225,7 +236,7 @@ function myAlert(content, title, color, icon, button) {
         buttons: {
             ok: {
                 text: 'OK',
-                btnClass: 'btn-' + button                
+                btnClass: 'btn-' + button
             }
         }
 
@@ -237,43 +248,43 @@ function myAlert(content, title, color, icon, button) {
 /**
  * Function that allows import CSV file and put into mysql database
  */
-function importCsv(){
+function importCsv() {
 
-    $('#csv_form').on('submit', function(event){
+    $('#csv_form').on('submit', function (event) {
 
         event.preventDefault()
 
         let csv = $('#csv_file').val()
-        
-        if(csv.search('.csv') > 0 || csv !== "") {
+
+        if (csv.search('.csv') > 0 || csv !== "") {
 
             $.ajax({
                 type: 'POST',
                 url: 'php/import_csv_stock.php',
                 data: new FormData(this),
-                contentType:false,
-                cache:false,
-                processData:false,
+                contentType: false,
+                cache: false,
+                processData: false,
 
-                success: function(result){
-    
-                    if(result.search('Total') === 0) {
+                success: function (result) {
+
+                    if (result.search('Total') === 0) {
                         myAlert('File Imported successfully </br>' + result, 'Success', 'green', 1, 'success')
                         $('#file-modal').modal('hide')
-                        table.ajax.reload(null, false)    
-    
+                        table.ajax.reload(null, false)
+
                     } else {
                         alert('error')
                         myAlert(result, 'Error', 'red', 0, 'danger')
                     }
-    
+
                 },
-                error: function(result){
-                    
+                error: function (result) {
+
                     myAlert(result, 'Error', 'red', 0, 'danger')
                 }
 
-            })// /ajax
+            }) // /ajax
 
         } else {
 
@@ -287,47 +298,96 @@ function importCsv(){
 /**
  * Get the list of suppliers for put into combobox
  */
-function getSuppliers(){
+function getSuppliers(row = null) {
 
-    // on show modal
-    $('#modal').on('shown.bs.modal', function(){
+    $.ajax({
+        type: 'POST',
+        url: 'php/get_suppliers.php',
 
-        $('#sale_price').attr('type', 'number')
-        $('#amount').attr('type', 'number')
-        $('#min_amount').attr('type', 'number')
-    
-        $.ajax({
-            type: 'POST',
-            url: 'php/get_suppliers.php',
-    
-            success: function(result){
+        success: function (result) {
 
-                result = JSON.parse(result)
+            $('#supplier').html(result)
 
-                // transform the input field into a combobox
-                $('#supplier').inputpicker({
-                    data:result,
-                    fields: [
-                        //{name:'id', text:'ID'},
-                        {name:'name', text:'Supplier'},
-                        {name:'cpf_cnpj', text:'CPF/CNPJ'}
-                    ],
-                    autoOpen: true,
-                    headShow: true,
-                    filterOpen: true,
-                    fieldText : 'name',
-                    fieldValue: 'id'
-                    
-                })
-            },
-            error: function(result){
-                
-                myAlert(result, 'Error', 'red', 0, 'danger')
+            if (row !== null) {
+                //Put the current supplier in the supplier field
+                $('#supplier').val(table.rows(row).data()[0][0].split('$')[1])
             }
-    
-        })// /ajax
-        
-    }) // on show modal
+        },
+        error: function (result) {
 
-    
-} // function 
+            myAlert(result, 'Error', 'red', 0, 'danger')
+        }
+
+    }) // /ajax
+
+
+} // function getSuppliers
+
+/**
+ * Handle the add, edit and csv-file close/hide modal events
+ */
+function modalsClose() {
+
+    // on hide/close the add/edit modal
+    $('#modal').on('hide.bs.modal', function () {
+        $('#form')[0].reset()
+        $('#form').parsley().reset()
+
+        stockId = null
+    })
+
+    // on hide-close modal CSV
+    $('#file-modal').on('hide.bs.modal', function () {
+        $('#csv_form')[0].reset()
+    })
+
+} // function modalsClose
+
+/**
+ * Handle the image croppie features
+ */
+function imageCroppie() {
+
+    // initialize the image croppie
+    image = $('#product_image').croppie({
+        viewport: {width: 200, height: 200, type:'square'},
+        boundary: {width: 300, height: 300},
+        update: function(data) {
+
+            //pick the image cropped and transform in BLOB for insert into the database
+            image.croppie('result', {
+                type: 'canvas',
+                size: 'viewport',
+                format: 'jpg',
+                quality: 0.8,
+                circle: false
+            }).then(function(blob){
+                $('#image').val(blob)
+            })
+        }
+
+    })
+
+    // on show/open the add/edit modal
+    $('#modal').on('shown.bs.modal', function(){
+        // necessary for avoid error on the modal
+        image.croppie('bind')
+    })
+
+    // on change input type file-image, put the image selected in the image croppie
+    $('#image_picker').on('change', function(){
+        if (this.files && this.files[0]) {
+
+            let reader = new FileReader()
+
+            reader.onload = function (e) {
+                image.croppie('bind', {
+                    url: e.target.result
+                })
+            }
+            reader.readAsDataURL(this.files[0])
+        }
+
+    }) //image-picker onChange
+
+} // function imageCroppie

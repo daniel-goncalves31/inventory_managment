@@ -2,42 +2,54 @@
 
     require_once 'db_connection.php';
 
-    if(isset($_POST['name'])) {
+    if(isset($_POST['supplier'])) {
 
-        $name = trim(ucfirst($_POST['name']));
-        $cpf = $_POST['cpf'];
-        $salary = $_POST['salary'];
-        $hir_date = $_POST['hir_date'];
-        $status = $_POST['status'];
+        $id_supplier = $_POST['supplier'];
+        $product = ucfirst(trim($_POST['product']));
+        $category = ucfirst(trim($_POST['category']));
+        $sale_price = str_replace(',', '.', $_POST['sale_price']);
+        $amount = $_POST['amount'];
+        $min_amount = $_POST['min_amount'];
+        $unit = strtolower($_POST['unit']);
+        $date = $_POST['date'];
+        
+        $image = $_POST['image'];
+        list($type, $image) = explode(';', $image);
+        list(, $image)      = explode(',', $image);
+        $image = base64_decode($image);
 
-        $salary = str_replace(',','.',$salary);
+        $query = "INSERT INTO stock(id_supplier, product, category, sale_price, amount, min_amount, unit, image) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
 
-        $query = "SELECT cpf FROM sellers WHERE cpf = '$cpf'";
+        $stmt = mysqli_stmt_init($con);
 
-        $result = mysqli_query($con, $query);
+        if(mysqli_stmt_prepare($stmt, $query)) {
 
-        if(mysqli_num_rows($result) > 0) {
+            mysqli_stmt_bind_param($stmt, "isssiiss", $id_supplier, $product, $category, $sale_price, $amount, $min_amount, $unit, $image);
+            mysqli_stmt_execute($stmt);
+            
+            // ****** Inserting the values in the purchases database *******
+            $query = "INSERT INTO purchases(id_product, price, date, amount) VALUES (?, ?, ?, ?)";
+            
+            // ID of the stock insert query
+            $id_stock = mysqli_insert_id($con);
+            
+            if(mysqli_stmt_prepare($stmt, $query)) {
+                
+                mysqli_stmt_bind_param($stmt, "issi", $id_stock, $sale_price, $date, $amount);
+                mysqli_stmt_execute($stmt); 
+                
+                $response = 'OK';
+    
+            } else {
 
-            $response = 'User already registered. Process Aborted!';
+                $response = "Database pruchase query error";
+            }
 
         } else {
 
-            $query = "INSERT INTO sellers(name, cpf, salary, hir_date, status) VALUES(?, ?, ?, ?, ?)";
-
-            $stmt = mysqli_stmt_init($con);
-
-            if(mysqli_stmt_prepare($stmt, $query)) {
-
-                mysqli_stmt_bind_param($stmt, "ssssi", $name, $cpf, $salary, $hir_date, $status);
-                mysqli_stmt_execute($stmt);
-    
-                $response = 'OK';
-
-            } else {
-
-                $response = "Database query error";
-            }
+            $response = "Database stock query error";
         }
+        
 
     } else {
 
