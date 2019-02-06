@@ -7,7 +7,7 @@
         $id_supplier = $_POST['supplier'];
         $product = ucfirst(trim($_POST['product']));
         $category = ucfirst(trim($_POST['category']));
-        $sale_price = str_replace(',', '.', $_POST['sale_price']);
+        $sale_price = trim(str_replace(',', '.', $_POST['sale_price']));
         $amount = $_POST['amount'];
         $min_amount = $_POST['min_amount'];
         $unit = strtolower($_POST['unit']);

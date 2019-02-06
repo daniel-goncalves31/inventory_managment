@@ -1,9 +1,11 @@
 //dataTable variable
-let table = null;
+let table = null
 //product id variable
-let stockId = null;
-// image of the product
-let image = null;
+let stockId = null
+// image croppie instance
+let image = null
+// url of the image in the database
+let imageUrl = null
 
 $(document).ready(function () {
 
@@ -22,8 +24,6 @@ $(document).ready(function () {
     modalsClose()
 
     add_updated()
-
-    importCsv()
 
     /*$('#table').dataTable().on('xhr.dt', function(){
 
@@ -198,12 +198,14 @@ function openEditModal(id, row) {
     getSuppliers(row)
 
     //fill up the modal with the product data
-    $('#product').val(table.rows(row).data()[0][1])
+    $('#product').val(table.rows(row).data()[0][0].split('/>">')[1])
     $('#category').val(table.rows(row).data()[0][2])
     $('#sale_price').val(table.rows(row).data()[0][4].split('$ ')[1])
     $('#min_amount').val(table.rows(row).data()[0][6].split(' ')[0])
     $('#unit').val(table.rows(row).data()[0][6].split(' ')[1])
 
+    //image url in the database
+    imageUrl = table.rows(row).data()[0][0].split("src=")[1].split("' height")[0].split("'")[1]
     stockId = id
 
     // show the modal
@@ -246,56 +248,6 @@ function myAlert(content, title, color, icon, button) {
 } // /function myAlert
 
 /**
- * Function that allows import CSV file and put into mysql database
- */
-function importCsv() {
-
-    $('#csv_form').on('submit', function (event) {
-
-        event.preventDefault()
-
-        let csv = $('#csv_file').val()
-
-        if (csv.search('.csv') > 0 || csv !== "") {
-
-            $.ajax({
-                type: 'POST',
-                url: 'php/import_csv_stock.php',
-                data: new FormData(this),
-                contentType: false,
-                cache: false,
-                processData: false,
-
-                success: function (result) {
-
-                    if (result.search('Total') === 0) {
-                        myAlert('File Imported successfully </br>' + result, 'Success', 'green', 1, 'success')
-                        $('#file-modal').modal('hide')
-                        table.ajax.reload(null, false)
-
-                    } else {
-                        alert('error')
-                        myAlert(result, 'Error', 'red', 0, 'danger')
-                    }
-
-                },
-                error: function (result) {
-
-                    myAlert(result, 'Error', 'red', 0, 'danger')
-                }
-
-            }) // /ajax
-
-        } else {
-
-            myAlert('Please select a CSV file for continue', 'Error', 'red', 0, 'danger')
-        }
-
-    }) // btn_csv.click
-
-} // /function importCsv
-
-/**
  * Get the list of suppliers for put into combobox
  */
 function getSuppliers(row = null) {
@@ -310,7 +262,7 @@ function getSuppliers(row = null) {
 
             if (row !== null) {
                 //Put the current supplier in the supplier field
-                $('#supplier').val(table.rows(row).data()[0][0].split('$')[1])
+                $('#supplier').val(table.rows(row).data()[0][1].split('$')[1])
             }
         },
         error: function (result) {
@@ -324,7 +276,7 @@ function getSuppliers(row = null) {
 } // function getSuppliers
 
 /**
- * Handle the add, edit and csv-file close/hide modal events
+ * Handle the add and edit close/hide modal events
  */
 function modalsClose() {
 
@@ -334,11 +286,6 @@ function modalsClose() {
         $('#form').parsley().reset()
 
         stockId = null
-    })
-
-    // on hide-close modal CSV
-    $('#file-modal').on('hide.bs.modal', function () {
-        $('#csv_form')[0].reset()
     })
 
 } // function modalsClose
@@ -361,17 +308,25 @@ function imageCroppie() {
                 format: 'jpg',
                 quality: 0.8,
                 circle: false
-            }).then(function(blob){
-                $('#image').val(blob)
+            }).then(function(canvas){
+                $('#image').val(canvas)
             })
         }
 
-    })
+    }) // image croppie
 
     // on show/open the add/edit modal
     $('#modal').on('shown.bs.modal', function(){
+
+        if (stockId === null) {
+            imageUrl = 'images/noimage.png'
+        }
+
         // necessary for avoid error on the modal
-        image.croppie('bind')
+        image.croppie('bind', {
+            url: imageUrl,
+            zoom: 0.0
+        })
     })
 
     // on change input type file-image, put the image selected in the image croppie

@@ -1,4 +1,5 @@
     <!-- Plugins JS -->
+    
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
     <!-- Popper -->
@@ -20,5 +21,5 @@
     <!-- Jquery Confirm -->
     <script src="plugins/confirmjs/confirmjs.min.js"></script>
 
-    <!-- InputPicker -->
-    <script src="plugins/inputpicker/inputpicker.js"></script>
+    <!-- All -->
+    <script src="js/all.js"></script>

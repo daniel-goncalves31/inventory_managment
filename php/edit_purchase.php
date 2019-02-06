@@ -1,83 +1,80 @@
 <?php
 
-    require 'db_connection.php';
+require 'db_connection.php';
 
-    
-    if(isset($_POST['id'])) {
+if (isset($_POST['id'])) {
 
-        $id = $_POST['id'];
-        $name = trim(ucfirst($_POST['name']));
-        $cpf = $_POST['cpf'];
-        $salary = $_POST['salary'];
-        $hir_date = $_POST['hir_date'];
-        $status = $_POST['status'];
+    $id = $_POST['id'];
+    $id_product = $_POST['product'];
+    $price = trim(str_replace(',', '.', $_POST['price']));
+    $date = $_POST['date'];
+    $amount = $_POST['amount'];
 
-        $salary = str_replace(',','.',$salary);
-        $salary = str_replace('R$ ','',$salary);
+    // 1 - get the old amount value from purchases table
+    $query = "SELECT amount FROM purchases WHERE id_purchase=$id";
 
-        //Query for check if the cpf/cnpj has changed
-        $query = "SELECT cpf FROM sellers WHERE cpf = '$cpf' AND id = $id";
+    $result = mysqli_query($con, $query);
 
-        // if not changed then update
-        if(mysqli_num_rows(mysqli_query($con, $query)) > 0) {
+    if ($row = mysqli_fetch_row($result)) {
 
-            $query = "UPDATE sellers SET name=?, cpf=?, salary=?, hir_date=?, status=? WHERE id = ?";
+        $older_amount = $row[0];
+
+        // 2 - get the actual amount value from stock
+        $query = "SELECT amount FROM stock WHERE id_stock=$id_product";
+
+        $result = mysqli_query($con, $query);
+
+        if ($row = mysqli_fetch_row($result)) {
+
+            $actual_amount = $row[0];
+
+            // 3 - update the purchases table with the new values
+            $query = 'UPDATE purchases SET id_product=?, price=?, date=?, amount=? WHERE id_purchase=?';
 
             $stmt = mysqli_stmt_init($con);
-    
-            if(mysqli_stmt_prepare($stmt, $query)) {
-    
-                mysqli_stmt_bind_param($stmt, 'ssssii', $name, $cpf, $salary, $hir_date, $status, $id);
+
+            if (mysqli_stmt_prepare($stmt, $query)) {
+
+                mysqli_stmt_bind_param($stmt, 'issii', $id_product, $price, $date, $amount, $id);
                 mysqli_stmt_execute($stmt);
+
+                // 4 - update the amount value of stock table
+                $query = "UPDATE stock SET amount=? WHERE id_stock=?";
+
+                if (mysqli_stmt_prepare($stmt, $query)) {
+
+                    $amount = $actual_amount + $amount - $older_amount;
+
+                    mysqli_stmt_bind_param($stmt, 'ii', $amount, $id_product);
+                    mysqli_stmt_execute($stmt);
     
-                $response = 'OK';
-                
-              
+                    $response = 'OK';
+    
+                } else {
+    
+                    $response = 'Error in database query UPDATE purchases';
+                }
+
             } else {
-                
-                $response = 'Error in database query';
+
+                $response = 'Error in database query UPDATE purchases';
             }
 
-            // if changed then verify if the new cpf/cnpj is unique
         } else {
 
-            $query = "SELECT cpf FROM sellers WHERE cpf = '$cpf'";
-
-            if(mysqli_num_rows(mysqli_query($con, $query)) > 0) {
-                
-                $response = 'Supplier is already cadastred. Process Aborted!';
-
-            } else {
-                
-                $query = "UPDATE sellers SET name=?, cpf=?, salary=?, hir_date=?, status=? WHERE id = ?";
-
-                $stmt = mysqli_stmt_init($con);
-
-                if(mysqli_stmt_prepare($stmt, $query)) {
-
-                    mysqli_stmt_bind_param($stmt, 'ssssii', $name, $cpf, $salary, $hir_date, $status, $id);
-                    mysqli_stmt_execute($stmt);
-
-                    $response = 'OK';
-                    
-                } else {
-                    
-                    $response = 'Error in database query';
-                }
-                
-            }
-
+            $response = 'Database error in query select amount from stock';
         }
-        
-        
+
     } else {
 
-        $response = 'ERROR: No data was passed';
+        $response = 'Database error in query select old amount from purchases';
     }
 
-    echo ($response);
+} else {
 
-    $con->close();
+    $response = 'ERROR: No data was passed';
+}
 
+echo $response;
 
-?>
+$con->close();

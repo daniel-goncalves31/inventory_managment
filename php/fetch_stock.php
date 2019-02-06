@@ -36,14 +36,13 @@
             </button>
         </div>';
 
-
         //Get the supplier name
         $query = "SELECT name FROM suppliers WHERE id = $row[1]";
         $var = mysqli_query($con, $query);
-        $supplier_name = $var ? $var->fetch_assoc()['name'] . '</span>'.'<span class=" d-none">$'.$row[1].'$</span>' : 'Supplier Deleted';
+        $supplier_name = $var ? $var->fetch_assoc()['name'] . '<span class=" d-none">$'.$row[1].'$</span>' : 'Supplier Deleted';
 
         //Put a image tooltip in the product name
-        $product = '<span data-toggle="tooltip" data-placement="top" title="<img src=\'data:image/jpg;base64,' . base64_encode($row['image']) . '\' height=\'230px\'/>">' . $row[2];
+        $product = '<span data-toggle="tooltip" data-placement="top" title="<img src=\'data:image/jpg;base64,' . base64_encode($row['image']) . '\' />">' . $row[2];
 
         //get and convert date format
         $query = "SELECT MAX(date) as 'LastDate' FROM purchases WHERE id_product = $row[0]";

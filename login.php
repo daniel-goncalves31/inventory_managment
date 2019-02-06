@@ -45,7 +45,7 @@
       <h3>Sign In</h3>
       <form id="login_form">
         <div class="inputbox">
-          <input type="text" name="username" placeholder="Username" required>
+          <input type="text" name="username" placeholder="Username" required autofocus>
           <span><i class="fas fa-user" aria-hidden="true"></i></span>
         </div>
         <div class="inputbox">

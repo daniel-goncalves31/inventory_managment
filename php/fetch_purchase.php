@@ -24,15 +24,15 @@
         </div>';
 
         // Query to get the supplier name the unit and the product
-        $query = "SELECT stock.product AS 'product', suppliers.name AS 'supplier', stock.unit as unit 
+        $query = "SELECT stock.product AS 'product', suppliers.name AS 'supplier', stock.unit as unit, stock.id_stock AS 'id'
         FROM suppliers INNER JOIN ( stock INNER JOIN purchases ON stock.id_stock = purchases.id_product)
         ON suppliers.id = stock.id_supplier WHERE stock.id_stock = $row[1]";
 
         $var = mysqli_query($con, $query);
-        $array = mysqli_fetch_assoc($var);
-        $supplier_name = $array['supplier'];
-        $product = $array['product'];
-        $unit = $array['unit'];
+        $x = mysqli_fetch_assoc($var);
+        $supplier_name = $x['supplier'];
+        $product = $x['product'].'<span class="d-none">$'.$x['id'].'$</span>';
+        $unit = $x['unit'];
 
         //get and convert date format
         $date = strtotime(str_replace('-','/',$row[3]));

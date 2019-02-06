@@ -1,7 +1,7 @@
 //dataTable variable
-let table; 
+let table = null 
 //purchase id variable
-let purchaseId = null;
+let purchaseId = null
 
 $(document).ready(function(){
 
@@ -19,19 +19,8 @@ $(document).ready(function(){
         purchaseId = null
     })
 
-    // on hide-close modal CSV
-    $('#file-modal').on('hide.bs.modal', function(){
-        $('#csv_form')[0].reset()
-    })
-
-
     //Add new purchase
     add_updated()
-
-    //Mask for the CPF or CNPJ field
-    maskCpf()
-
-    importCsv()
 
 }) // /document.ready
 
@@ -63,6 +52,15 @@ function fetchDataTable(){
  */
 function add_updated() {
 
+    //when the add modal is opened get the products name from the database
+    $('#openAddModal').on('click', function () {
+
+        getProducts()
+
+        $('#modal').modal('show')
+
+    })
+
     // on form submit
     $('#form').on('submit', function(event){
 
@@ -71,7 +69,7 @@ function add_updated() {
         // check the id value for verify if is insert or update
         let url = purchaseId === null ? 'php/add_purchase.php' : 'php/edit_purchase.php'
         let text = purchaseId === null ? 'Added' : 'Updated'
-        let data = purchaseId === null ? $('#form').serialize() : $('#form').serialize() + '&id=' + purchaseId
+        let data = $('#form').serialize() + '&id=' + purchaseId
 
         $.ajax({
             type: 'POST',
@@ -166,19 +164,14 @@ function openEditModal(id, row) {
     $('.modal-title').text('Edit Purchase')
 
     //fill up the modal with the purchase data
-    $('#name').val(table.rows(row).data()[0][0])
-    $('#cpf').val(table.rows(row).data()[0][1])
-    $('#salary').val(table.rows(row).data()[0][2])
-
     //convert date to Y-m-d
-    let date = table.rows(row).data()[0][3].split('/')
-    $('#hir_date').val(date[2] + '-' + date[1] + '-' + date[0])
+    let date = table.rows(row).data()[0][2].split('/')
+    $('#date').val(date[2] + '-' + date[1] + '-' + date[0])
+    $('#price').val(table.rows(row).data()[0][3].split('$ ')[1])
+    $('#amount').val(table.rows(row).data()[0][4].split(' ')[0])
 
-    if(table.rows(row).data()[0][4].search('Active') > 0) {
-        $('#status').val(1)
-    } else {
-        $('#status').val(0)
-    }
+    getProducts(row)
+
 
     purchaseId = id
     
@@ -187,22 +180,6 @@ function openEditModal(id, row) {
 
 
 } // /function edit
-
-/**
- * Perform the mask for the field
- */
-function maskCpf() {
-
-    let options = {
-        onKeyPress: function (cpf, ev, el, op) {
-            let masks = ['000.000.000-00'];
-            $('#cpf').mask(masks[0], op);
-        }
-    }
-    
-    $('#cpf').mask('000.000.000-00#', options);
-
-} // function maskCpfCnpj
 
 /**
  * Display the alerts and the dialogs
@@ -238,49 +215,30 @@ function myAlert(content, title, color, icon, button) {
 
 } // /function myAlert
 
-function importCsv(){
+/**
+ * Get the list of suppliers for put into combobox
+ */
+function getProducts(row = null) {
 
-    $('#csv_form').on('submit', function(event){
+    $.ajax({
+        type: 'POST',
+        url: 'php/get_products.php',
 
-        event.preventDefault()
+        success: function (result) {
 
-        let csv = $('#csv_file').val()
-        
-        if(csv.search('.csv') > 0 || csv !== "") {
+            $('#product').html(result)
 
-            $.ajax({
-                type: 'POST',
-                url: 'php/import_csv_purchase.php',
-                data: new FormData(this),
-                contentType:false,
-                cache:false,
-                processData:false,
+            if (row !== null) {
+                //Put the current product in the product field
+                $('#product').val(table.rows(row).data()[0][0].split('$')[1])
+            }
+        },
+        error: function (result) {
 
-                success: function(result){
-    
-                    if(result.search('Total') === 0) {
-                        myAlert('File Imported successfully </br>' + result, 'Success', 'green', 1, 'success')
-                        $('#file-modal').modal('hide')
-                        table.ajax.reload(null, false)    
-    
-                    } else {
-                        alert('error')
-                        myAlert(result, 'Error', 'red', 0, 'danger')
-                    }
-    
-                },
-                error: function(result){
-                    
-                    myAlert(result, 'Error', 'red', 0, 'danger')
-                }
-
-            })// /ajax
-
-        } else {
-
-            myAlert('Please select a CSV file for continue', 'Error', 'red', 0, 'danger')
+            myAlert(result, 'Error', 'red', 0, 'danger')
         }
 
-    }) // btn_csv.click
+    }) // /ajax
 
-} // /function importCsv
+
+} // function getSuppliers

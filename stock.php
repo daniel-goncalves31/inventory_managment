@@ -14,9 +14,6 @@
         <button class="btn btn-secondary ml-auto mb-4" id="openAddModal">
           <i class="fas fa-plus" ></i> Add New Product
         </button>
-        <button class="btn btn-secondary ml-auto mb-4" data-toggle="modal" data-target="#file-modal">
-        <i class="fas fa-file-csv"></i> Import CSV file
-        </button>
 
         <table id="table" class="table table-bordered table-striped" style="width: 100%;">
 
@@ -47,16 +44,15 @@
               <div class="modal-body">
               <div class="alert alert-info" role="alert"> <strong>The other fields only can be edited in the Purchases section! </strong> </div>
               <form id="form">
-                <div class="form-group">
+                <div class="form-group m-0">
                   <label for="image">Product Image</label>
-                  <img src="images/back1.jpeg" id="product_image">
+                  <img src="images/noimage.png" id="product_image">
                 </div>
-                <div class="custom-file">
-                  <input type="file" accept="image/*" class="custom-file-input" id="image_picker">
-                  <label class="custom-file-label" for="image_picker">select the product image</label>
-                  <input type="hidden" name="image" id="image">
-                  </br>
+                <div style="width: 100%;" class="d-flex">
+                  <input type="file" accept="image/*" id="image_picker">
+                  <label class="custom-image-label ml-auto" for="image_picker"><i class="fas fa-camera"></i></label>
                 </div>
+                <hr class="mt-2">
                 <div class="form-group">
                   <label for="supplier">Supplier Name</label>
                   <select id="supplier" type="text" class="form-control" name="supplier" aria-describedby="supplier" placeholder="supplier name"  required>
@@ -111,31 +107,6 @@
             </div>
           </div>
         </div> <!-- /modal -->
-
-        <div class="modal fade" id="file-modal" tabindex="-1" role="dialog" aria-labelledby="FileModal" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h4 class="modal-title">Select a valid CSV file</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-              <form id="csv_form" enctype="multipart/form-data">
-                <div class="custom-file">
-                  <input name="file" type="file" class="custom-file-input" id="csv_file" accept='.csv'>
-                  <label class="custom-file-label" for="csv_file">Choose file</label>
-                </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button id="btn_csv" type="submit" class="btn btn-primary">Done</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
 
       </div> <!-- /card-body -->
 

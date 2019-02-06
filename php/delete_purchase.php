@@ -6,7 +6,7 @@
 
         $id = $_POST['id'];
 
-        $query = "DELETE FROM sellers WHERE id = ?";
+        $query = "DELETE FROM purchases WHERE id_purchase = ?";
 
         $stmt = mysqli_stmt_init($con);
 

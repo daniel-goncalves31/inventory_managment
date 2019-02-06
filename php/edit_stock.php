@@ -13,19 +13,26 @@
         $min_amount = $_POST['min_amount'];
         $unit = strtolower($_POST['unit']);
 
+        //get the image and encode her to the correct format
+        $image = $_POST['image'];
+        list($type, $image) = explode(';', $image);
+        list(, $image)      = explode(',', $image);
+        $image = base64_decode($image);
+
+
         //Query for check if the supplier/product is already cadastred
         $query = "SELECT id_supplier, product FROM stock WHERE id_supplier = $id_supplier AND product = '$product' AND id_stock=$id";
 
         //if all results match then is the same product and supplier so just update the other fields
         if(mysqli_num_rows(mysqli_query($con, $query)) > 0) {
             
-            $query = "UPDATE stock SET id_supplier=?, product=?, category=?, sale_price=?, min_amount=?, unit=? WHERE id_stock=?";
+            $query = "UPDATE stock SET id_supplier=?, product=?, category=?, sale_price=?, min_amount=?, unit=?, image=? WHERE id_stock=?";
 
             $stmt = mysqli_stmt_init($con);
 
             if(mysqli_stmt_prepare($stmt, $query)) {
 
-                mysqli_stmt_bind_param($stmt, 'isssisi', $id_supplier, $product, $category, $sale_price, $min_amount, $unit,  $id);
+                mysqli_stmt_bind_param($stmt, 'isssissi', $id_supplier, $product, $category, $sale_price, $min_amount, $unit, $image, $id);
                 mysqli_stmt_execute($stmt);
 
                 $response = 'OK';
@@ -47,15 +54,15 @@
               // if not update  
             } else {
                 
-                $query = "UPDATE stock SET id_supplier=?, product=?, category=?, sale_price=?, min_amount=?, unit=? WHERE id_stock=?";
-    
+                $query = "UPDATE stock SET id_supplier=?, product=?, category=?, sale_price=?, min_amount=?, unit=?, image=? WHERE id_stock=?";
+
                 $stmt = mysqli_stmt_init($con);
-    
+
                 if(mysqli_stmt_prepare($stmt, $query)) {
-    
-                    mysqli_stmt_bind_param($stmt, 'isssisi', $id_supplier, $product, $category, $sale_price, $min_amount, $unit,  $id);
+
+                    mysqli_stmt_bind_param($stmt, 'isssissi', $id_supplier, $product, $category, $sale_price, $min_amount, $unit, $image, $id);
                     mysqli_stmt_execute($stmt);
-    
+
                     $response = 'OK';
                     
                 } else {

@@ -69,8 +69,21 @@ if (!isset($_SESSION['user_id'])) {
             <a href="purchases.php" class="menu_btn"><i class="fas fa-barcode"></i> Purchases</a>
         </li>
         <li class="item" >
-            <a href="#" class="menu_btn"><i class="fas fa-sign-out-alt"></i> LogOut</a>
+            <a href="#" class="menu_btn" id="logout"><i class="fas fa-sign-out-alt"></i> LogOut</a>
         </li>
+
+        <!-- <div id="float-button">
+            <i class="fas fa-bell"></i>
+        </div>
+        <div class="b1">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <div class="b2">
+            <i class="fas fa-birthday-cake"></i>
+        </div>
+        <div class="b3">
+            <i class="fas fa-comments"></i>
+        </div> -->
 
     </div> <!-- /menu -->
 

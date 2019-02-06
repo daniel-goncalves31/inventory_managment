@@ -2,7 +2,7 @@
 
     require_once 'db_connection.php';
 
-    $query = "SELECT id, name, cpf_cnpj FROM suppliers";
+    $query = "SELECT id, name, cpf_cnpj FROM suppliers ORDER BY name ASC";
 
     $result = mysqli_query($con, $query);
 
