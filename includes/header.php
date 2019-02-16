@@ -18,8 +18,11 @@ if (!isset($_SESSION['user_id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    
     <title>CRUD</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 
     <!-- Normalize CSS -->
     <link rel="stylesheet" href="plugins/normalize_css/normalize.css">
@@ -38,6 +41,9 @@ if (!isset($_SESSION['user_id'])) {
 
     <!-- Croppie -->
     <link rel="stylesheet" href="plugins/croppie/croppie.css">
+
+    <!-- Boostrap Select -->
+    <link rel="stylesheet" href="plugins/boostrap_select/bootstrap_select.min.css">
     
     <!-- Style -->
     <link rel="stylesheet" href="css/menu.css">
@@ -51,7 +57,7 @@ if (!isset($_SESSION['user_id'])) {
 
     <div class="menu">
         <li class="item" >
-            <a href="dashboard.php" class="menu_btn"><i class="far fa-user"></i> Dashboard</a>
+            <a href="dashboard.php" class="menu_btn"><i class="fas fa-chart-pie"></i> Dashboard</a>
         </li>
         <li class="item" >
             <a href="suppliers.php" class="menu_btn"><i class="fas fa-user-tag"></i> Suppliers</a>
@@ -67,6 +73,9 @@ if (!isset($_SESSION['user_id'])) {
         </li>
         <li class="item" >
             <a href="purchases.php" class="menu_btn"><i class="fas fa-barcode"></i> Purchases</a>
+        </li>
+        <li class="item" >
+            <a href="add_sale.php" class="menu_btn"><i class="fab fa-opencart"></i> Add Sale</a>
         </li>
         <li class="item" >
             <a href="#" class="menu_btn" id="logout"><i class="fas fa-sign-out-alt"></i> LogOut</a>

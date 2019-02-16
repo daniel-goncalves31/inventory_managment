@@ -6,6 +6,8 @@ let stockId = null
 let image = null
 // url of the image in the database
 let imageUrl = null
+// canvas of the image for put in the database
+let canvasImage = null
 
 $(document).ready(function () {
 
@@ -15,7 +17,7 @@ $(document).ready(function () {
     $('body').tooltip({
         selector: '[data-toggle="tooltip"]',
         html: true,
-    });
+    })
     //active the form validation
     $('#form').parsley()
 
@@ -82,14 +84,12 @@ function add_updated() {
 
         // var with all form data
         let data = new FormData(this)
-
-        console.log($('#image').val())
+        data.append('id', stockId)
+        data.append('image', canvasImage)
 
         // check the id value for verify if is insert or update
         let url = stockId === null ? 'php/add_stock.php' : 'php/edit_stock.php'
         let text = stockId === null ? 'Added' : 'Updated'
-
-        data.append('id', stockId)
 
         $.ajax({
             type: 'POST',
@@ -147,7 +147,6 @@ function del(id) {
                 text: 'Yes',
                 btnClass: 'btn-blue',
                 action: function () {
-                    console.log('yes')
                     $.ajax({
 
                         type: 'POST',
@@ -297,9 +296,16 @@ function imageCroppie() {
 
     // initialize the image croppie
     image = $('#product_image').croppie({
-        viewport: {width: 200, height: 200, type:'square'},
-        boundary: {width: 300, height: 300},
-        update: function(data) {
+        viewport: {
+            width: 200,
+            height: 200,
+            type: 'square'
+        },
+        boundary: {
+            width: 300,
+            height: 300
+        },
+        update: function (data) {
 
             //pick the image cropped and transform in BLOB for insert into the database
             image.croppie('result', {
@@ -308,15 +314,15 @@ function imageCroppie() {
                 format: 'jpg',
                 quality: 0.8,
                 circle: false
-            }).then(function(canvas){
-                $('#image').val(canvas)
+            }).then(function (canvas) {
+                canvasImage = canvas
             })
         }
 
     }) // image croppie
 
     // on show/open the add/edit modal
-    $('#modal').on('shown.bs.modal', function(){
+    $('#modal').on('shown.bs.modal', function () {
 
         if (stockId === null) {
             imageUrl = 'images/noimage.png'
@@ -330,7 +336,7 @@ function imageCroppie() {
     })
 
     // on change input type file-image, put the image selected in the image croppie
-    $('#image_picker').on('change', function(){
+    $('#image_picker').on('change', function () {
         if (this.files && this.files[0]) {
 
             let reader = new FileReader()

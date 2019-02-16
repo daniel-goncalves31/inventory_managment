@@ -152,3 +152,16 @@ input[type="file"] {
     display: inline;
     left: 45%;
 }
+
+/* Product names with image tooltip*/
+.product-image {
+    color: #0992ee;
+    text-decoration: underline;
+    text-decoration-style: solid;
+    text-decoration-color: #0992ee;
+    cursor: pointer;
+}
+
+.product-image:hover{
+    color: #2980b9;
+}
